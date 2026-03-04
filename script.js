@@ -10,14 +10,12 @@ arr.forEach((button) => {
 
     if (buttonText == "=") {
       try {
-        // Evita calcular se a string estiver vazia ou inválida
         if (string.trim() === "") {
           return;
         }
         string = eval(string).toString();
         input.value = string;
       } catch (error) {
-        // Se houver erro no cálculo, mostra "Erro" e reseta
         input.value = "Erro";
         string = "";
       }
@@ -28,12 +26,10 @@ arr.forEach((button) => {
       string = string.substring(0, string.length - 1);
       input.value = string || "0";
     } else {
-      // Impede adicionar operadores no início (exceto números e ponto)
       if (string === "" && ["/", "*", "-", "+", "%"].includes(buttonText)) {
         return;
       }
 
-      // Impede adicionar operadores consecutivos
       const lastChar = string.slice(-1);
       if (
         ["/", "*", "-", "+", "%"].includes(lastChar) &&
@@ -42,7 +38,6 @@ arr.forEach((button) => {
         return;
       }
 
-      // Impede múltiplos pontos decimais no mesmo número
       if (buttonText === ".") {
         const parts = string.split(/[\+\-\*\/\%]/);
         const lastNumber = parts[parts.length - 1];
@@ -53,16 +48,14 @@ arr.forEach((button) => {
 
       string += buttonText;
       input.value = string;
-      // Rola automaticamente para o final
       input.scrollLeft = input.scrollWidth;
     }
   });
 });
 
-// Impede a entrada manual de letras no input
 input.addEventListener("input", (e) => {
   const value = input.value;
-  // Remove qualquer caractere que não seja número, operador ou ponto
+
   const sanitized = value.replace(/[^0-9+\-*/.%]/g, "");
 
   if (value !== sanitized) {
@@ -73,7 +66,6 @@ input.addEventListener("input", (e) => {
   }
 });
 
-// Suporte para tecla Enter
 input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -82,7 +74,6 @@ input.addEventListener("keydown", (e) => {
   }
 });
 
-// Impede colar texto inválido
 input.addEventListener("paste", (e) => {
   e.preventDefault();
   const pastedText = (e.clipboardData || window.clipboardData).getData("text");
